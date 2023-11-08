@@ -9,20 +9,25 @@ namespace Booking.Controllers
     [ApiController]
     public class ZimmersController : ControllerBase
     {
-        private static List<Zimmer> zimmers = new List<Zimmer>();
-        private static int count = 1;
+        private readonly DataContext context;
+        public ZimmersController(DataContext _context)
+        {
+
+            this.context = _context;
+
+        }
         // GET: api/<RentersController>
         [HttpGet]
         public IEnumerable<Zimmer> Get()
         {
-            return zimmers;
+            return context.ZimmersList;
         }
 
         // GET api/<RentersController>/5
         [HttpGet("{id}")]
         public ActionResult<Zimmer> Get(int zimmerCode)
         {
-            var zimmer = zimmers.Find(e => e.codeZimmer == zimmerCode);
+            var zimmer = context.ZimmersList.Find(e => e.codeZimmer == zimmerCode);
             if (zimmer == null)
                 return NotFound();
             return zimmer;
@@ -32,14 +37,14 @@ namespace Booking.Controllers
         [HttpPost]
         public void Post([FromBody] Zimmer z)
         {
-            zimmers.Add(new Zimmer { codeZimmer = count++,name=z.name,address=z.address,city=z.city,description=z.description,price=z.price });
+            context.ZimmersList.Add(new Zimmer { codeZimmer = context.CntZimmers++,name=z.name,address=z.address,city=z.city,description=z.description,price=z.price });
         }
 
         // PUT api/<RentersController>/5
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] Zimmer z)
         {
-            var zimmer = zimmers.Find(e => e.codeZimmer == z.codeZimmer);
+            var zimmer = context.ZimmersList.Find(e => e.codeZimmer == z.codeZimmer);
             if (zimmer == null)
                 return NotFound();
             zimmer.name = z.name;
@@ -54,10 +59,10 @@ namespace Booking.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            var zimmer = zimmers.Find(e => e.codeZimmer == id);
+            var zimmer = context.ZimmersList.Find(e => e.codeZimmer == id);
             if (zimmer == null)
                 return NotFound();
-            zimmers.Remove(zimmer);
+            context.ZimmersList.Remove(zimmer);
             return Ok();
 
         }

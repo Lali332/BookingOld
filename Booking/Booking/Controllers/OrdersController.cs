@@ -9,20 +9,23 @@ namespace Booking.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private static List<Orders> orders = new List<Orders>();
-        private static int count = 1;
+        private readonly DataContext context;
+        public OrdersController(DataContext _context)
+        {
+            context= _context;
+        }
         // GET: api/<OrdersController>
         [HttpGet]
         public IEnumerable<Orders> Get()
         {
-            return orders;
+            return context.OrdersList;
         }
 
         // GET api/<OrdersController>/5
         [HttpGet("{id}")]
         public ActionResult<Orders> Get(int id)
         {
-            var order = orders.Find(e => e.codeOrder == id);
+            var order = context.OrdersList.Find(e => e.codeOrder == id);
             if (order == null)
                 return NotFound();
             return order;
@@ -32,9 +35,9 @@ namespace Booking.Controllers
         [HttpPost]
         public void Post([FromBody] Orders o)
         {
-            orders.Add(new Orders
+            context.OrdersList.Add(new Orders
             {
-                codeOrder = count++,
+                codeOrder = context.CntOrders++,
                 codeZimmer = o.codeZimmer,
                 tenantName = o.tenantName,
                 tenantPhone = o.tenantPhone,
@@ -48,7 +51,7 @@ namespace Booking.Controllers
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] Orders o)
         {
-            var order = orders.Find(e => e.codeOrder == o.codeOrder);
+            var order = context.OrdersList.Find(e => e.codeOrder == o.codeOrder);
             if (order == null)
                 return NotFound();
             order.codeZimmer = o.codeZimmer;
@@ -64,10 +67,10 @@ namespace Booking.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            var order = orders.Find(e => e.codeOrder == id);
+            var order = context.OrdersList.Find(e => e.codeOrder == id);
             if (order == null)
                 return NotFound();
-            orders.Remove(order);
+            context.OrdersList.Remove(order);
             return Ok();
         }
     }
