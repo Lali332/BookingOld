@@ -1,4 +1,5 @@
-﻿using Booking.Entities;
+﻿using Booking.Core.Entities;
+using Booking.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -11,58 +12,46 @@ namespace Booking.Controllers
     [ApiController]
     public class RentersController : ControllerBase
     {
-        private readonly DataContext context;
-        public RentersController(DataContext _context)
+        private readonly IRenterService _renterService;
+        public RentersController(IRenterService renterService)
         {
 
-            this.context = _context;
+            this._renterService =renterService;
 
         }
         // GET: api/<RentersController>
         [HttpGet]
-        public IEnumerable<Renter> Get()
+        public ActionResult Get()
         {
-            return context.RentersList;
+            return Ok(_renterService.GetAllRenters());
         }
 
         // GET api/<RentersController>/5
         [HttpGet("{id}")]
-        public ActionResult<Renter> Get(int renterCode)
+        public Renter Get(int renterCode)
         {
-            var renter = context.RentersList.Find(e => e.renterCode== renterCode);
-            if (renter == null)
-                return NotFound();
-            return renter;
+            return _renterService.GetRenterById(renterCode);
         }
 
         // POST api/<RentersController>
         [HttpPost]
         public void Post([FromBody] Renter r)
         {
-            context.RentersList.Add(new Renter { renterCode= context.CntRenters++,name=r.name,phone=r.phone});
+            _renterService.AddRenter(r);
         }
 
         // PUT api/<RentersController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Renter r)
+        public void Put(int id, [FromBody] Renter r)
         {
-            var renter = context.RentersList.Find(e => e.renterCode == r.renterCode);
-            if (renter == null)
-                return NotFound();
-            renter.name = r.name;
-            renter.phone = r.phone;
-            return Ok();
+            _renterService.UpDateRenter(id,r);
         }
 
         // DELETE api/<RentersController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public void Delete(int id)
         {
-            var renter = context.RentersList.Find(e => e.renterCode == id);
-            if (renter == null)
-                return NotFound();
-            context.RentersList.Remove(renter);
-            return Ok();
+            _renterService.DeleteRenter(id);
 
         }
     }

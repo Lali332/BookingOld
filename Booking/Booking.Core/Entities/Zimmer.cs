@@ -1,4 +1,4 @@
-﻿namespace Booking.Entities
+﻿namespace Booking.Core.Entities
 {
     public class Zimmer
     {
@@ -9,6 +9,6 @@
         public int renterCode { get; set; }
         public int price { get; set; }
         public string description { get; set; }
-        public Zimmer() { }
+      
     }
 }

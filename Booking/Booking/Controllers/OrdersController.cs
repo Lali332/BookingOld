@@ -1,4 +1,5 @@
-﻿using Booking.Entities;
+﻿using Booking.Core.Entities;
+using Booking.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,69 +10,43 @@ namespace Booking.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly DataContext context;
-        public OrdersController(DataContext _context)
+        private readonly IOrderService _orderService;
+        public OrdersController(IOrderService orderService)
         {
-            context= _context;
+            _orderService = orderService;
         }
         // GET: api/<OrdersController>
         [HttpGet]
-        public IEnumerable<Orders> Get()
+        public ActionResult Get()
         {
-            return context.OrdersList;
+            return Ok(_orderService.GetAllOrders());
         }
-
         // GET api/<OrdersController>/5
         [HttpGet("{id}")]
-        public ActionResult<Orders> Get(int id)
+        public Orders Get(int id)
         {
-            var order = context.OrdersList.Find(e => e.codeOrder == id);
-            if (order == null)
-                return NotFound();
-            return order;
+           return _orderService.GetOrderById(id);
         }
 
         // POST api/<OrdersController>
         [HttpPost]
         public void Post([FromBody] Orders o)
         {
-            context.OrdersList.Add(new Orders
-            {
-                codeOrder = context.CntOrders++,
-                codeZimmer = o.codeZimmer,
-                tenantName = o.tenantName,
-                tenantPhone = o.tenantPhone,
-                orderDate = o.orderDate,
-                arrivalDate = o.arrivalDate,
-                departureDate = o.departureDate
-            });
+            _orderService.AddOrder(o);
         }
 
         // PUT api/<OrdersController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Orders o)
+        public void Put(int id, [FromBody] Orders o)
         {
-            var order = context.OrdersList.Find(e => e.codeOrder == o.codeOrder);
-            if (order == null)
-                return NotFound();
-            order.codeZimmer = o.codeZimmer;
-            order.tenantName = o.tenantName;
-            order.tenantPhone = o.tenantPhone;
-            order.orderDate = o.orderDate;
-            order.arrivalDate = o.arrivalDate;
-            order.departureDate = o.departureDate;
-            return Ok(order);
+            _orderService.UpDateOrder(id,o);
         }
 
         // DELETE api/<OrdersController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public void Delete(int id)
         {
-            var order = context.OrdersList.Find(e => e.codeOrder == id);
-            if (order == null)
-                return NotFound();
-            context.OrdersList.Remove(order);
-            return Ok();
+            _orderService.DeleteOrder(id);
         }
     }
 }

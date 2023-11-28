@@ -1,4 +1,6 @@
-﻿using Booking.Entities;
+﻿
+using Booking.Core.Entities;
+using Booking.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,61 +11,46 @@ namespace Booking.Controllers
     [ApiController]
     public class ZimmersController : ControllerBase
     {
-        private readonly DataContext context;
-        public ZimmersController(DataContext _context)
+        private readonly IZimmerService _zimmerService;
+        public ZimmersController(IZimmerService zimmerService)
         {
 
-            this.context = _context;
+            this._zimmerService = zimmerService;
 
         }
         // GET: api/<RentersController>
         [HttpGet]
-        public IEnumerable<Zimmer> Get()
+        public ActionResult Get()
         {
-            return context.ZimmersList;
+            return Ok(_zimmerService.GetAllZimmers());
         }
 
         // GET api/<RentersController>/5
         [HttpGet("{id}")]
-        public ActionResult<Zimmer> Get(int zimmerCode)
+        public Zimmer Get(int zimmerCode)
         {
-            var zimmer = context.ZimmersList.Find(e => e.codeZimmer == zimmerCode);
-            if (zimmer == null)
-                return NotFound();
-            return zimmer;
+            return _zimmerService.GetZimmerById(zimmerCode);
         }
 
         // POST api/<RentersController>
         [HttpPost]
         public void Post([FromBody] Zimmer z)
         {
-            context.ZimmersList.Add(new Zimmer { codeZimmer = context.CntZimmers++,name=z.name,address=z.address,city=z.city,description=z.description,price=z.price });
+            _zimmerService.AddZimmer(z);
         }
 
         // PUT api/<RentersController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Zimmer z)
+        public void Put(int id, [FromBody] Zimmer z)
         {
-            var zimmer = context.ZimmersList.Find(e => e.codeZimmer == z.codeZimmer);
-            if (zimmer == null)
-                return NotFound();
-            zimmer.name = z.name;
-            zimmer.price=z.price;
-            zimmer.address=z.address;
-            zimmer.city=z.city;
-            zimmer.description=z.description;
-            return Ok();
+            _zimmerService.UpDateZimmer(id, z);
         }
 
         // DELETE api/<RentersController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public void Delete(int id)
         {
-            var zimmer = context.ZimmersList.Find(e => e.codeZimmer == id);
-            if (zimmer == null)
-                return NotFound();
-            context.ZimmersList.Remove(zimmer);
-            return Ok();
+            _zimmerService.DeleteZimmer(id);
 
         }
     }

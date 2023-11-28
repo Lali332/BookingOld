@@ -1,4 +1,6 @@
-﻿namespace Booking.Entities
+﻿using Booking.Core.Entities;
+
+namespace Booking.Date
 {
     public class DataContext
     {

@@ -1,4 +1,4 @@
-﻿namespace Booking.Entities
+﻿namespace Booking.Core.Entities
 {
     public class Orders
     {
@@ -6,9 +6,12 @@
         public int codeZimmer { get; set; }
         public string? tenantName { get; set; }
         public string? tenantPhone { get; set; }
-        public DateOnly orderDate { get; set; }
-        public DateOnly arrivalDate { get; set; }
-        public DateOnly departureDate { get; set; }
+        public DateTime orderDate { get; set; }
+        public DateTime arrivalDate { get; set; }
+        public DateTime departureDate { get; set; }
 
     }
 }
+
+
+

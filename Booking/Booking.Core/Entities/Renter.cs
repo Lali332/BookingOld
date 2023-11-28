@@ -1,4 +1,4 @@
-﻿namespace Booking.Entities
+﻿namespace Booking.Core.Entities
 {
     public class Renter
     {

@@ -1,4 +1,9 @@
-using Booking.Entities;
+
+using Booking.Core.Services;
+using Booking.Core.Repositories;
+using Booking.Date;
+using Booking.Service;
+using Booking.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +14,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<DataContext>();
-
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IRenterService, RenterService>();
+builder.Services.AddScoped<IZimmerService, ZimmerService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IRenterRepository, RenterRepository>();
+builder.Services.AddScoped<IZimmerRepository, ZimmerRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
