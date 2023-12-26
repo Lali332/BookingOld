@@ -18,20 +18,20 @@ namespace Booking.Data.Repositories
         }
         public List<Zimmer> GetAllZimmers()
         {
-            return _context.ZimmersList;
+            return _context.Zimmers.ToList();
         }
         public Zimmer GetZimmerById(int id)
         {
-            return _context.ZimmersList.Find(o => o.codeZimmer == id);
+            return _context.Zimmers.ToList().Find(o => o.zimmerId == id);
         }
         public void DeleteZimmer(int id)
         {
-            var zimmer = _context.ZimmersList.Find(o => o.codeZimmer == id);
-            _context.ZimmersList.Remove(zimmer);
+            var zimmer = _context.Zimmers.ToList().Find(o => o.zimmerId == id);
+            _context.Zimmers.Remove(zimmer);
         }
         public void UpDateZimmer(int id,Zimmer z)
         {
-            var zimmer = _context.ZimmersList.Find(e => e.codeZimmer ==id);
+            var zimmer = _context.Zimmers.ToList().Find(e => e.zimmerId ==id);
             zimmer.name = z.name;
             zimmer.price = z.price;
             zimmer.address = z.address;
@@ -40,8 +40,8 @@ namespace Booking.Data.Repositories
         }
         public void AddZimmer(Zimmer z)
         {
-            _context.ZimmersList.Add(new Zimmer { 
-                codeZimmer = _context.CntZimmers++,
+            _context.Zimmers.Add(new Zimmer { 
+                zimmerId = _context.CntZimmers++,
                 name = z.name, 
                 address = z.address, 
                 city = z.city,

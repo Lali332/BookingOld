@@ -18,20 +18,20 @@ namespace Booking.Data.Repositories
         }
         public List<Orders> GetAllOrders()
         {
-            return _context.OrdersList;
+            return _context.Orders.ToList();
         }
         public Orders GetOrdersById(int id)
         {
-            return _context.OrdersList.Find(o => o.codeOrder == id);
+            return _context.Orders.ToList().Find(o => o.ordersId == id);
         }
         public void DeleteOrder(int id)
         {
-            var order = _context.OrdersList.Find(o => o.codeOrder == id);          
-            _context.OrdersList.Remove(order);         
+            var order = _context.Orders.ToList().Find(o => o.ordersId == id);          
+            _context.Orders.Remove(order);         
         }
         public void UpDateOrder(int id ,Orders o)
         {
-            var order = _context.OrdersList.Find(e => e.codeOrder == id);   
+            var order = _context.Orders.ToList().Find(e => e.ordersId == id);   
             order.codeZimmer = o.codeZimmer;
             order.tenantName = o.tenantName;
             order.tenantPhone = o.tenantPhone;
@@ -41,9 +41,9 @@ namespace Booking.Data.Repositories
         }
         public void AddOrder(Orders o)
         {
-            _context.OrdersList.Add(new Orders
+            _context.Orders.Add(new Orders
             {
-                codeOrder = _context.CntOrders++,
+                ordersId = _context.CntOrders++,
                 codeZimmer = o.codeZimmer,
                 tenantName = o.tenantName,
                 tenantPhone = o.tenantPhone,

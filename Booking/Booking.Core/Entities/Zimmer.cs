@@ -2,7 +2,7 @@
 {
     public class Zimmer
     {
-        public int codeZimmer { get; set; }
+        public int zimmerId { get; set; }
         public string name { get; set; }
         public string city { get; set; }
         public string address { get; set; }
