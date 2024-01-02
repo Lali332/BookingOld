@@ -22,35 +22,34 @@ namespace Booking.Data.Repositories
         }
         public Orders GetOrdersById(int id)
         {
-            return _context.Orders.ToList().Find(o => o.ordersId == id);
+            return _context.Orders.Find(id);
         }
         public void DeleteOrder(int id)
         {
-            var order = _context.Orders.ToList().Find(o => o.ordersId == id);          
-            _context.Orders.Remove(order);         
+            var order = GetOrdersById(id);         
+            _context.Orders.Remove(order);  
+            _context.SaveChanges(); 
         }
         public void UpDateOrder(int id ,Orders o)
         {
-            var order = _context.Orders.ToList().Find(e => e.ordersId == id);   
-            order.codeZimmer = o.codeZimmer;
-            order.tenantName = o.tenantName;
-            order.tenantPhone = o.tenantPhone;
-            order.orderDate = o.orderDate;
-            order.arrivalDate = o.arrivalDate;
-            order.departureDate = o.departureDate;
+            var order = GetOrdersById(id);
+            if (order != null)
+            {
+                order.codeZimmer = o.codeZimmer;
+                order.tenantName = o.tenantName;
+                order.tenantPhone = o.tenantPhone;
+                order.orderDate = o.orderDate;
+                order.arrivalDate = o.arrivalDate;
+                order.departureDate = o.departureDate;
+                _context.SaveChanges();
+            }
+            
         }
         public void AddOrder(Orders o)
         {
-            _context.Orders.Add(new Orders
-            {
-                ordersId = _context.CntOrders++,
-                codeZimmer = o.codeZimmer,
-                tenantName = o.tenantName,
-                tenantPhone = o.tenantPhone,
-                orderDate = o.orderDate,
-                arrivalDate = o.arrivalDate,
-                departureDate = o.departureDate
-            });
+            _context.Orders.Add(o);
+            _context.SaveChanges();
+
         }
     }
  

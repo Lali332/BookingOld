@@ -22,31 +22,28 @@ namespace Booking.Data.Repositories
         }
         public Zimmer GetZimmerById(int id)
         {
-            return _context.Zimmers.ToList().Find(o => o.zimmerId == id);
+            return _context.Zimmers.Find( id);
         }
         public void DeleteZimmer(int id)
         {
-            var zimmer = _context.Zimmers.ToList().Find(o => o.zimmerId == id);
+            var zimmer = GetZimmerById(id);
             _context.Zimmers.Remove(zimmer);
+            _context.SaveChanges();
         }
         public void UpDateZimmer(int id,Zimmer z)
         {
-            var zimmer = _context.Zimmers.ToList().Find(e => e.zimmerId ==id);
+            var zimmer = GetZimmerById(id);
             zimmer.name = z.name;
             zimmer.price = z.price;
             zimmer.address = z.address;
             zimmer.city = z.city;
             zimmer.description = z.description;
+            _context.SaveChanges();
         }
         public void AddZimmer(Zimmer z)
         {
-            _context.Zimmers.Add(new Zimmer { 
-                zimmerId = _context.CntZimmers++,
-                name = z.name, 
-                address = z.address, 
-                city = z.city,
-                description = z.description, 
-                price = z.price });
+            _context.Zimmers.Add(z);
+            _context.SaveChanges();
         }
     }
 }

@@ -22,25 +22,25 @@ namespace Booking.Data.Repositories
         }
         public Renter GetRenterById(int id)
         {
-            return _context.Renters.ToList().Find(o => o.renterId == id);
+            return _context.Renters.Find(id);
         }
         public void DeleteRenter(int id)
         {
-            var renter = _context.Renters.ToList().Find(o => o.renterId == id);
+            var renter = GetRenterById(id);
             _context.Renters.Remove(renter);
+            _context.SaveChanges();
         }
         public void UpDateRenter(int id,Renter r)
         {
-            var renter = _context.Renters.ToList().Find(e => e.renterId ==id);          
+            var renter = GetRenterById(id);         
             renter.name = r.name;
             renter.phone = r.phone;
+            _context.SaveChanges();
         }
         public void AddRenter(Renter r)
         {
-            _context.Renters.Add(new Renter
-            { renterId = _context.CntRenters++, 
-                name = r.name,
-                phone = r.phone });
+            _context.Renters.Add(r);
+            _context.SaveChanges();
         }
     }
 }
